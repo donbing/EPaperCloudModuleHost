@@ -6,6 +6,7 @@ RUN pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requ
     && rm -rf /tmp/pip-tmp
 RUN mkdir app
 COPY ./run.py app
+COPY ./pqf app
 copy ./lib app/lib
 copy ./pic app/pic
 
