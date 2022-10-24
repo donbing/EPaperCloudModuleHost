@@ -46,10 +46,10 @@ class MyServer(tcp_sver.tcp_sver):
             Himage = Image.new('1', (epd.width, epd.height), 255)  # 255: clear the frame
             draw = ImageDraw.Draw(Himage)
 
-            quote = get_pratchet_quote(1)
-            
-            for idx, x in enumerate(quote):
-                draw.text((0, idx * 15), x, font = font24, fill = 0)
+            for quote_line in get_pratchet_quote(1):
+                wrap_lines = text_wrap(quote_line, font24, 400)
+                for idx, line in enumerate(wrap_lines):
+                    draw.text((0, idx * 20), line, font = font24, fill = 0)
 
             self.flush_buffer(epd.getbuffer(Himage))
             self.Send_cmd('S')                    
@@ -77,9 +77,34 @@ def get_pratchet_quote(target):
                 else:
                     quote.clear()
     return quote
-            
+
+def text_wrap(text, font = None, max_width = None):
+  lines = []
+  if font.getlength(text) < max_width:
+    lines.append(text)
+  else:
+    words = text.split(' ')
+    i = 0
+    while i < len(words):
+      line = ''
+      while i < len(words) and font.getlength(line + words[i]) <= max_width:
+        line = line + words[i] + " "
+        i += 1
+      if not line:
+        line = words[i]
+        i += 1
+      lines.append(line)
+  return lines
         
 if __name__ == "__main__":
+    
+    # quote = get_pratchet_quote(1)
+    # print(quote)
+    # for quote_line in quote:
+    #     wrap_lines = text_wrap(quote_line, font24, 400)
+    #     for idx, line in enumerate(wrap_lines):
+    #         print(line)
+
     ip=tcp_sver.get_host_ip()
     logging.info('{0}'.format(ip))
     socketserver.allow_reuse_address = True
