@@ -46,10 +46,13 @@ class MyServer(tcp_sver.tcp_sver):
             Himage = Image.new('1', (epd.width, epd.height), 255)  # 255: clear the frame
             draw = ImageDraw.Draw(Himage)
 
+            idx = 0
             for quote_line in get_pratchet_quote(1):
                 wrap_lines = text_wrap(quote_line, font24, 400)
-                for idx, line in enumerate(wrap_lines):
+                for line in wrap_lines:
                     draw.text((0, idx * 20), line, font = font24, fill = 0)
+                    idx += 1
+                idx += 1
 
             self.flush_buffer(epd.getbuffer(Himage))
             self.Send_cmd('S')                    
