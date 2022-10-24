@@ -68,7 +68,7 @@ def get_pratchet_quote(target):
             if not line.strip():
                 steps += 1
             else:
-                quote.add(line)
+                quote.append(line)
             if steps == 2:
                 quotes_read += 1
                 steps = 0
