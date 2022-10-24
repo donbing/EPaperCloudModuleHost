@@ -9,7 +9,7 @@ import sys
 # if os.path.exists(libdir):
 #     sys.path.append(libdir)
 
-from PIL import ImageDrawl
+from PIL import ImageDraw
 from PIL import ImageFont
 from PIL import Image
 
