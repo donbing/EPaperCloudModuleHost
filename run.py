@@ -13,7 +13,7 @@ libdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'lib')
 from PIL import ImageDraw
 from PIL import ImageFont
 from PIL import Image
-
+from random import randint
 from lib.waveshare_epd import waveshare_epd  
 from lib.tcp_server import tcp_sver 
 import socketserver
@@ -47,9 +47,10 @@ class MyServer(tcp_sver.tcp_sver):
             draw = ImageDraw.Draw(Himage)
 
             idx = 0
-            for quote_line in get_pratchet_quote(1):
+            for quote_line in get_pratchet_quote(randint(1,300)):
                 wrap_lines = text_wrap(quote_line, font24, 400)
                 for line in wrap_lines:
+                    print(wrap_lines)
                     draw.text((0, idx * 20), line, font = font24, fill = 0)
                     idx += 1
                 idx += 1
@@ -100,14 +101,6 @@ def text_wrap(text, font = None, max_width = None):
   return lines
         
 if __name__ == "__main__":
-    
-    # quote = get_pratchet_quote(1)
-    # print(quote)
-    # for quote_line in quote:
-    #     wrap_lines = text_wrap(quote_line, font24, 400)
-    #     for idx, line in enumerate(wrap_lines):
-    #         print(line)
-
     ip=tcp_sver.get_host_ip()
     logging.info('{0}'.format(ip))
     socketserver.allow_reuse_address = True
@@ -117,8 +110,8 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         server.shutdown()
         os.system("clear")
-    #except :
-    #    pass
+    except :
+       pass
         
         
 
