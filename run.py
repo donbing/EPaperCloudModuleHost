@@ -44,18 +44,9 @@ class MyServer(tcp_sver.tcp_sver):
             #creat new Image and draw the image
             Himage = Image.new('1', (epd.width, epd.height), 255)  # 255: clear the frame
             draw = ImageDraw.Draw(Himage)
-            for x in range(0,10,9):
-                draw.text((0, 0        +(x*20)), 'Rusty Bee, Did a Wee', font = font24, fill = 0)
-                draw.text((0, 20       +(x*20)), 'on the floor cos he was poor', font = font18, fill = 0)
-                draw.text((0, 40       +(x*20)), 'C.Bingham', font = font18, fill = 0)    
-                draw.line((20, 50       +(x*20), 70, 100     +(x*20)), fill = 0)
-                draw.line((70, 50       +(x*20), 20, 100     +(x*20)), fill = 0)
-                draw.rectangle((20, 50  +(x*20), 70, 100     +(x*20)), outline = 0)
-                draw.line((165, 50      +(x*20), 165, 100    +(x*20)), fill = 0)
-                draw.line((140, 75      +(x*20), 190, 75     +(x*20)), fill = 0)
-                draw.arc((140, 50       +(x*20), 190, 100    +(x*20)), 0, 360, fill = 0)
-                draw.rectangle((80, 50  +(x*20), 130, 100    +(x*20)), fill = 0)
-                draw.chord((200, 50     +(x*20), 250, 100    +(x*20)), 0, 360, fill = 0) 
+            draw.text((0, 0 ), 'Rusty Bee, Did a Wee', font = font24, fill = 0)
+            draw.text((0, 20), 'on the floor cos he was poor', font = font18, fill = 0)
+            draw.text((0, 40), 'C.Bingham', font = font18, fill = 0)    
             #display
             self.flush_buffer(epd.getbuffer(Himage))
             #open image files
