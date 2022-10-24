@@ -48,10 +48,9 @@ class MyServer(tcp_sver.tcp_sver):
 
             idx = 0
             for quote_line in get_pratchet_quote(randint(1,300)):
-                wrap_lines = text_wrap(quote_line, font24, 400)
+                wrap_lines = text_wrap(quote_line, font18, 400)
                 for line in wrap_lines:
-                    print(wrap_lines)
-                    draw.text((0, idx * 20), line, font = font24, fill = 0)
+                    draw.text((0, idx * 20), line.replace('\n', ''), font = font18, fill = 0)
                     idx += 1
                 idx += 1
 
