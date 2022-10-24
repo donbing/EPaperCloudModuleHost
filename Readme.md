@@ -1,2 +1,2 @@
 # EPaperCloudServer
-> epaper server, inna cloud! 🌥️
+> epaper server, in a cloud! 🌥️
