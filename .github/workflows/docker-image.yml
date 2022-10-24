@@ -9,7 +9,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  TEST_TAG: donbing/EPaperCloudModuleHost:test
+  TEST_TAG: donbing/epapercloudmodulehost:latest
 
 jobs:
 
