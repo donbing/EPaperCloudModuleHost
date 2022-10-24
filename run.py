@@ -45,9 +45,9 @@ class MyServer(tcp_sver.tcp_sver):
             Himage = Image.new('1', (epd.width, epd.height), 255)  # 255: clear the frame
             draw = ImageDraw.Draw(Himage)
             for x in range(0,10,9):
-                draw.text((0, 0        +(x*20)), 'hello world', font = font24, fill = 0)
-                draw.text((0, 20       +(x*20)), '2.13inch e-Paper', font = font18, fill = 0)
-                draw.text((0, 40       +(x*20)), u'微雪电子', font = font18, fill = 0)    
+                draw.text((0, 0        +(x*20)), 'Rusty Bee, Did a Wee', font = font24, fill = 0)
+                draw.text((0, 20       +(x*20)), 'on the floor cos he wanted more', font = font18, fill = 0)
+                draw.text((0, 40       +(x*20)), 'C.Bingham', font = font18, fill = 0)    
                 draw.line((20, 50       +(x*20), 70, 100     +(x*20)), fill = 0)
                 draw.line((70, 50       +(x*20), 20, 100     +(x*20)), fill = 0)
                 draw.rectangle((20, 50  +(x*20), 70, 100     +(x*20)), outline = 0)
