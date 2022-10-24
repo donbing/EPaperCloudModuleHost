@@ -59,10 +59,9 @@ class MyServer(tcp_sver.tcp_sver):
             self.close()
             os.system("clear")
 
-def get_pratchet_quote():
+def get_pratchet_quote(target):
     steps = 0
     quotes_read = 0
-    target = 1
     quote = []
     with open('./pqf') as f:
         for line in f:
@@ -73,9 +72,10 @@ def get_pratchet_quote():
             if steps == 2:
                 quotes_read += 1
                 steps = 0
-            if quotes_read == target:
-                break
-
+                if quotes_read == target:
+                    break
+                else:
+                    quote.clear()
     return quote
             
         
