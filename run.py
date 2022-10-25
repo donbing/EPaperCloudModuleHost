@@ -2,24 +2,16 @@
 # -*- coding:utf-8 -*-
 
 import os
-from queue import Empty
-import sys
 
 picdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'pic')
 libdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'lib')
-# if os.path.exists(libdir):
-#     sys.path.append(libdir)
 
-from PIL import ImageDraw
-from PIL import ImageFont
-from PIL import Image
+from PIL import ImageDraw, ImageFont, Image
 from random import randint
 from lib.waveshare_epd import waveshare_epd  
 from lib.tcp_server import tcp_sver 
 import socketserver
 import logging
-font24 = ImageFont.truetype(os.path.join(picdir, 'Font01.ttc'), 24)
-
 from progressbar import *
 
 logging.basicConfig(level=logging.INFO)  
@@ -37,14 +29,13 @@ class MyServer(tcp_sver.tcp_sver):
             #set image size
             self.set_size(epd.width,epd.height)
             #font 
-            font24 = ImageFont.truetype(os.path.join(picdir, 'Font01.ttc'), 24)
             font18 = ImageFont.truetype(os.path.join(picdir, 'Font01.ttc'), 18)
-            font35 = ImageFont.truetype(os.path.join(picdir, 'Font01.ttc'), 35)
             
-            #creat new Image and draw the image
+            #create new Image and draw the image
             Himage = Image.new('1', (epd.width, epd.height), 255)  # 255: clear the frame
             draw = ImageDraw.Draw(Himage)
 
+            # format the quote for the screen (badly)
             idx = 0
             for quote_line in get_pratchet_quote(randint(1,300)):
                 wrap_lines = text_wrap(quote_line, font18, 400)
