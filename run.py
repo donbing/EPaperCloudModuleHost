@@ -52,7 +52,6 @@ class MyServer(tcp_sver.tcp_sver):
                 for line in wrap_lines:
                     draw.text((0, idx * 20), line.replace('\n', ''), font = font18, fill = 0)
                     idx += 1
-                idx += 1
 
             self.flush_buffer(epd.getbuffer(Himage))
             self.Send_cmd('S')                    
