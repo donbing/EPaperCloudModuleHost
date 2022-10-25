@@ -28,7 +28,6 @@ class MyServer(tcp_sver.tcp_sver):
     def handle(self):
         try:
             self.client = self.request
-            logging.info('yo')
             #get id
             self.Get_ID()  
             #unlock if password = 123456
@@ -49,6 +48,7 @@ class MyServer(tcp_sver.tcp_sver):
             idx = 0
             for quote_line in get_pratchet_quote(randint(1,300)):
                 wrap_lines = text_wrap(quote_line, font18, 400)
+                logging.info(wrap_lines)
                 for line in wrap_lines:
                     draw.text((0, idx * 20), line.replace('\n', ''), font = font18, fill = 0)
                     idx += 1
@@ -101,17 +101,6 @@ def text_wrap(text, font = None, max_width = None):
   return lines
         
 if __name__ == "__main__":
-
-    # idx = 0
-    # font18 = ImageFont.truetype(os.path.join(picdir, 'Font01.ttc'), 18)
-    # for quote_line in get_pratchet_quote(randint(1,300)):
-    #     wrap_lines = text_wrap(quote_line, font18, 400)
-    #     print(wrap_lines)
-    #     for line in wrap_lines:
-    #         idx += 1
-    #     idx += 1
-
-
     ip=tcp_sver.get_host_ip()
     logging.info('{0}'.format(ip))
     socketserver.allow_reuse_address = True
