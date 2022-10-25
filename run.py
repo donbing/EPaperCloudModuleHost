@@ -83,6 +83,7 @@ def get_pratchet_quote(target):
 
 def text_wrap(text, font = None, max_width = None):
   lines = []
+  text = text.replace('\n','')
   if font.getlength(text) < max_width:
     lines.append(text)
   else:
@@ -100,6 +101,17 @@ def text_wrap(text, font = None, max_width = None):
   return lines
         
 if __name__ == "__main__":
+
+    # idx = 0
+    # font18 = ImageFont.truetype(os.path.join(picdir, 'Font01.ttc'), 18)
+    # for quote_line in get_pratchet_quote(randint(1,300)):
+    #     wrap_lines = text_wrap(quote_line, font18, 400)
+    #     print(wrap_lines)
+    #     for line in wrap_lines:
+    #         idx += 1
+    #     idx += 1
+
+
     ip=tcp_sver.get_host_ip()
     logging.info('{0}'.format(ip))
     socketserver.allow_reuse_address = True
