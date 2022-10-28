@@ -1,13 +1,13 @@
-FROM python:3.10-slim-bullseye
+FROM python:3.10.8-alpine3.16
 EXPOSE 6868/tcp
 
-COPY requirements.txt /tmp/pip-tmp/
-RUN pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt \
-    && rm -rf /tmp/pip-tmp
-RUN mkdir app
+COPY requirements.txt /requirements.txt
+RUN pip install --no-cache-dir -r /requirements.txt
+
 COPY ./run.py app
 COPY ./pqf app
-copy ./lib app/lib
-copy ./pic app/pic
+COPY ./lib app/lib
+COPY ./pic app/picdocker
 
-CMD cd app && python3 -m run
+WORKDIR /app
+CMD ["python3", "-m", "run"]
