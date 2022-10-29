@@ -16,7 +16,7 @@ from progressbar import *
 
 logging.basicConfig(level=logging.INFO)  
 
-class MyServer(tcp_sver.tcp_sver):
+class WaveshareCloudQuoteServer(tcp_sver.tcp_sver):
     def handle(self):
         try:
             self.client = self.request
@@ -27,7 +27,7 @@ class MyServer(tcp_sver.tcp_sver):
             #init epd setting
             epd = waveshare_epd.EPD(4.2)
             #set image size
-            self.set_size(epd.width,epd.height)
+            self.set_size(epd.width, epd.height)
             #font 
             font18 = ImageFont.truetype(os.path.join(picdir, 'Font01.ttc'), 18)
             
@@ -53,18 +53,18 @@ class MyServer(tcp_sver.tcp_sver):
             os.system("clear")
 
 def get_pratchet_quote(target):
-    steps = 0
+    empty_lines_count = 0
     quotes_read = 0
     quote = []
     with open('./pqf') as f:
         for line in f:
             if not line.strip():
-                steps += 1
+                empty_lines_count += 1
             else:
                 quote.append(line)
-            if steps == 2:
+            if empty_lines_count == 2:
                 quotes_read += 1
-                steps = 0
+                empty_lines_count = 0
                 if quotes_read == target:
                     break
                 else:
@@ -94,7 +94,7 @@ if __name__ == "__main__":
     ip=tcp_sver.get_host_ip()
     logging.info('{0}'.format(ip))
     socketserver.allow_reuse_address = True
-    server = socketserver.ThreadingTCPServer((ip, 6868, ), MyServer)    
+    server = socketserver.ThreadingTCPServer((ip, 6868, ), WaveshareCloudQuoteServer)    
     try:
         server.serve_forever()
     except KeyboardInterrupt:
