@@ -4,6 +4,7 @@ EXPOSE 6868/tcp
 COPY requirements.txt /requirements.txt
 RUN pip install --disable-pip-version-check --no-cache-dir -r /requirements.txt && rm -rf /tmp/pip-tmp
 
+RUN mkdir app
 COPY ./run.py app
 COPY ./pqf app
 COPY ./lib app/lib
