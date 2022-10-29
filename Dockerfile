@@ -7,7 +7,7 @@ RUN pip install --no-cache-dir -r /requirements.txt
 COPY ./run.py app
 COPY ./pqf app
 COPY ./lib app/lib
-COPY ./pic app/picdocker
+COPY ./pic app/pic
 
 WORKDIR /app
 CMD ["python3", "-m", "run"]
