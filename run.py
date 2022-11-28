@@ -2,10 +2,11 @@
 # -*- coding:utf-8 -*-
 
 import os
-
+import re
 picdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'pic')
 libdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'lib')
 
+from d import DrawText, TextBlock, Align
 from PIL import ImageDraw, ImageFont, Image
 from random import randint
 from lib.waveshare_epd import waveshare_epd  
@@ -15,6 +16,27 @@ import logging
 from progressbar import *
 
 logging.basicConfig(level=logging.INFO)  
+font18 = ImageFont.truetype(os.path.join(picdir, 'Font01.ttc'), 18)
+
+class ParsedQuote():
+    def __init__(self, text):
+        self.quote = re.split(r"\s+--", text)[0].strip()
+        self.footer = re.split(r"\s+--", text)[1].strip()
+
+    def draw_text_line(self, raw_text):
+        return [DrawText(raw_text, font18)]
+
+    def draw(self, image):
+        quote_wrapped_to_lines = text_wrap(self.quote, font18, image.im.size[0])
+        quote_mapped_to_draw = list(map(self.draw_text_line, quote_wrapped_to_lines))
+
+        footer_wrapped_to_lines = text_wrap(self.footer, font18, image.im.size[0])
+        footer_mapped_to_draw = list(map(self.draw_text_line, footer_wrapped_to_lines))
+
+        block1 = TextBlock(quote_mapped_to_draw, align=Align.Centre)
+        block2 = TextBlock(footer_mapped_to_draw, align=Align.BottomRight)
+        block1.draw_on(image)
+        block2.draw_on(image)
 
 class WaveshareCloudQuoteServer(tcp_sver.tcp_sver):
     def handle(self):
@@ -28,21 +50,12 @@ class WaveshareCloudQuoteServer(tcp_sver.tcp_sver):
             epd = waveshare_epd.EPD(4.2)
             #set image size
             self.set_size(epd.width, epd.height)
-            #font 
-            font18 = ImageFont.truetype(os.path.join(picdir, 'Font01.ttc'), 18)
             
             #create new Image and draw the image
             Himage = Image.new('1', (epd.width, epd.height), 255)  # 255: clear the frame
             draw = ImageDraw.Draw(Himage)
 
-            # format the quote for the screen (badly)
-            idx = 0
-            for quote_line in get_pratchet_quote(randint(1,300)):
-                wrap_lines = text_wrap(quote_line, font18, 400)
-                logging.info(wrap_lines)
-                for line in wrap_lines:
-                    draw.text((0, idx * 20), line.replace('\n', ''), font = font18, fill = 0)
-                    idx += 1
+            draw_pratchet_quote(get_pratchet_quote(randint(1,300)), draw)
 
             self.flush_buffer(epd.getbuffer(Himage))
             self.Send_cmd('S')                    
@@ -51,6 +64,11 @@ class WaveshareCloudQuoteServer(tcp_sver.tcp_sver):
         except KeyboardInterrupt :
             self.close()
             os.system("clear")
+
+def draw_pratchet_quote(quote, draw):
+    text = ''.join(quote)
+    parsed = ParsedQuote(text)
+    parsed.draw(draw)
 
 def get_pratchet_quote(target):
     empty_lines_count = 0
@@ -72,23 +90,24 @@ def get_pratchet_quote(target):
     return quote
 
 def text_wrap(text, font = None, max_width = None):
-  lines = []
-  text = text.replace('\n','')
-  if font.getlength(text) < max_width:
-    lines.append(text)
-  else:
-    words = text.split(' ')
-    i = 0
-    while i < len(words):
-      line = ''
-      while i < len(words) and font.getlength(line + words[i]) <= max_width:
-        line = line + words[i] + " "
-        i += 1
-      if not line:
-        line = words[i]
-        i += 1
-      lines.append(line)
-  return lines
+    lines = []
+
+    for split_line in text.split('\n'):
+        if font.getlength(split_line) < max_width:
+            lines.append(split_line)
+        else:
+            words = split_line.split(' ')
+            word_count = 0
+            while word_count < len(words):
+                line = ''
+                while word_count < len(words) and font.getlength(line + words[word_count]) <= max_width:
+                    line = line + words[word_count] + " "
+                    word_count += 1
+                if not line:
+                    line = words[word_count]
+                    word_count += 1
+                lines.append(line)
+    return lines
         
 if __name__ == "__main__":
     ip=tcp_sver.get_host_ip()
