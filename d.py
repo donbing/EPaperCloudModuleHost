@@ -1,5 +1,4 @@
 import random
-
 from PIL import Image, ImageDraw
 
 padding = 0
