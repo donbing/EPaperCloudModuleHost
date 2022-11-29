@@ -1,6 +1,3 @@
-#!/usr/bin/python
-# -*- coding:utf-8 -*-
-
 import os
 import re
 picdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'pic')

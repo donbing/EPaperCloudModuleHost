@@ -6,6 +6,7 @@ RUN pip install --disable-pip-version-check --no-cache-dir -r /requirements.txt 
 
 RUN mkdir app
 COPY ./run.py app
+COPY ./d.py app
 COPY ./pqf app
 COPY ./lib app/lib
 COPY ./pic app/pic
