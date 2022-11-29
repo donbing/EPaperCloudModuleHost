@@ -23,7 +23,7 @@ class ParsedQuote():
     def draw_text_line(self, raw_text):
         return [DrawText(raw_text, font18)]
 
-    def draw(self, image):
+    def draw(self, image): 
         quote_wrapped_to_lines = text_wrap(self.quote, font18, image.im.size[0])
         quote_mapped_to_draw = list(map(self.draw_text_line, quote_wrapped_to_lines))
 
@@ -31,7 +31,7 @@ class ParsedQuote():
         footer_mapped_to_draw = list(map(self.draw_text_line, footer_wrapped_to_lines))
 
         block1 = TextBlock(quote_mapped_to_draw, align=Align.Centre)
-        block2 = TextBlock(footer_mapped_to_draw, align=Align.BottomRight)
+        block2 = TextBlock(footer_mapped_to_draw, align=Align.BottomLeft)
         block1.draw_on(image)
         block2.draw_on(image)
 
