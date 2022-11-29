@@ -1,19 +1,21 @@
 import os
 import re
+import socketserver
+import logging
+
+from PIL import ImageDraw, ImageFont, Image
+from random import randint
+from progressbar import *
+
 picdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'pic')
 libdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'lib')
 
 from d import DrawText, TextBlock, Align
-from PIL import ImageDraw, ImageFont, Image
-from random import randint
 from lib.waveshare_epd import waveshare_epd  
 from lib.tcp_server import tcp_sver 
-import socketserver
-import logging
-from progressbar import *
 
 logging.basicConfig(level=logging.INFO)  
-font18 = ImageFont.truetype(os.path.join(picdir, 'Font01.ttc'), 18)
+font18 = ImageFont.truetype(os.path.join(picdir, 'Font01.ttc'), 20)
 
 class ParsedQuote():
     def __init__(self, text):
@@ -23,7 +25,7 @@ class ParsedQuote():
     def draw_text_line(self, raw_text):
         return [DrawText(raw_text, font18)]
 
-    def draw(self, image): 
+    def draw(self, image):
         quote_wrapped_to_lines = text_wrap(self.quote, font18, image.im.size[0])
         quote_mapped_to_draw = list(map(self.draw_text_line, quote_wrapped_to_lines))
 
@@ -47,18 +49,18 @@ class WaveshareCloudQuoteServer(tcp_sver.tcp_sver):
             epd = waveshare_epd.EPD(4.2)
             #set image size
             self.set_size(epd.width, epd.height)
-            
+
             #create new Image and draw the image
-            Himage = Image.new('1', (epd.width, epd.height), 255)  # 255: clear the frame
-            draw = ImageDraw.Draw(Himage)
+            blank_image = Image.new('1', (epd.width, epd.height), 255)  # 255: clear the frame
+            draw = ImageDraw.Draw(blank_image)
 
             draw_pratchet_quote(get_pratchet_quote(randint(1,300)), draw)
 
-            self.flush_buffer(epd.getbuffer(Himage))
-            self.Send_cmd('S')                    
-        except ConnectionResetError :
+            self.flush_buffer(epd.getbuffer(blank_image))
+            self.Send_cmd('S')
+        except ConnectionResetError:
             self.Wait_write("lose connect.")
-        except KeyboardInterrupt :
+        except KeyboardInterrupt:
             self.close()
             os.system("clear")
 
@@ -105,10 +107,10 @@ def text_wrap(text, font = None, max_width = None):
                     word_count += 1
                 lines.append(line)
     return lines
-        
+
 if __name__ == "__main__":
     ip=tcp_sver.get_host_ip()
-    logging.info('{0}'.format(ip))
+    logging.info('Hosted on %s', ip)
     socketserver.allow_reuse_address = True
     server = socketserver.ThreadingTCPServer((ip, 6868, ), WaveshareCloudQuoteServer)    
     try:
@@ -118,7 +120,3 @@ if __name__ == "__main__":
         os.system("clear")
     except :
        pass
-        
-        
-
-
