@@ -9,22 +9,21 @@ quote_lines = [
 '        -- (Terry Pratchett, alt.fan.pratchett)'
 ]
 
-k = """
+long_multiline_quote = """
 It's a sad and terrible thing that high-born folk really have thought that the servants would be totally fooled if spirits were put into decanters that were cunningly labelled *backwards*. 
 
 And also throughout history the more politically conscious butler has taken it on trust, and with rather more justification, that his employers will not notice if the whisky is topped up with eniru.
         -- (Terry Pratchett, Hogfather)"""
 
-from random import randint
 class TestStringMethods(unittest.TestCase):
 
     def test_upper(self):
-        #create new Image and draw the image
+        # create new Image and draw the image
         img = Image.new('1', (400, 300), 255)  # 255: clear the frame
         draw = ImageDraw.Draw(img)
 
-        run.draw_pratchet_quote(k, draw)
-        
+        run.draw_pratchet_quote(long_multiline_quote, draw)
+
         #run.draw_pratchet_quote(run.get_pratchet_quote(randint(1,300)), draw)
         img.save('test.png')
 
